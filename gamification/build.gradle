@@ -1,6 +1,30 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'maven'
+apply plugin: 'com.jfrog.artifactory'
+apply plugin: 'maven-publish'
+apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: 'dagger.hilt.android.plugin'
+
+group = 'com.fif.fpaydevsteam'
+version = rootProject.ext.fifLibraryVersion
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: mavenLocal().url)
+        }
+    }
+}
+
+kapt {
+    javacOptions {
+        option("-source", "8")
+        option("-target", "8")
+    }
+}
 
 android {
     compileSdkVersion 29
@@ -23,6 +47,126 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "sources"
+}
+
+artifactory {
+    contextUrl = 'https://artifactory.fif.tech/artifactory/'
+    publish {
+        repository {
+            // The Artifactory repository key to publish to
+            if (project.findProperty("deployVariant") == "release") {
+                repoKey = 'android-releases'
+            } else {
+                repoKey = 'android-snapshots'
+                if (project.hasProperty("debugVersion")) {
+                    version = "$version-${project.findProperty("debugVersion")}"
+                }
+                version = "$version-SNAPSHOT"
+            }
+
+            username = System.env.ARTIFACTORY_USERNAME
+            password = System.env.ARTIFACTORY_PASSWORD
+        }
+        defaults {
+            // Tell the Artifactory Plugin which artifacts should be published to Artifactory.
+            publications('aar')
+            publishArtifacts = true
+
+            // Properties to be attached to the published artifacts.
+            properties = ['qa.level': 'basic', 'dev.team': 'core']
+            // Publish generated POM files to Artifactory (true by default)
+            publishPom = true
+        }
+    }
+}
+
+publishing {
+    publications {
+        aar(MavenPublication) {
+            groupId group
+            version = version
+            artifactId project.getName()
+
+            // Tell maven to prepare the generated "*.aar" file for publishing
+            if (project.findProperty("deployVariant") == "release") {
+                println("Upload ${project.getName()}-release.aar")
+                artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
+            } else {
+                println("Upload ${project.getName()}-debug.aar")
+                artifact("$buildDir/outputs/aar/${project.getName()}-debug.aar")
+                artifact(sourceJar)
+            }
+
+            pom.withXml {
+                def dependencies = asNode().appendNode('dependencies')
+
+                // List all compile dependencies and write to POM
+                configurations.implementation.getAllDependencies().each { Dependency dep ->
+                    if (dep.group == null || dep.version == null || dep.name == null || dep.name == "unspecified")
+                        return // ignore invalid dependencies
+
+                    def dependencyNode = dependencies.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', dep.group)
+                    dependencyNode.appendNode('artifactId', dep.name)
+                    dependencyNode.appendNode('version', dep.version)
+
+                    if (!dep.transitive) {
+                        // If this dependency is transitive, we should force exclude all its dependencies them from the POM
+                        def exclusionNode = dependencyNode.appendNode('exclusions').appendNode('exclusion')
+                        exclusionNode.appendNode('groupId', '*')
+                        exclusionNode.appendNode('artifactId', '*')
+                    } else if (!dep.properties.excludeRules.empty) {
+                        // Otherwise add specified exclude rules
+                        def exclusionsNode = dependencyNode.appendNode('exclusions')
+                        dep.properties.excludeRules.each { ExcludeRule rule ->
+                            def exclusionNode = exclusionsNode.appendNode('exclusion')
+                            exclusionNode.appendNode('groupId', rule.group ?: '*')
+                            exclusionNode.appendNode('artifactId', rule.module ?: '*')
+                        }
+                    }
+                }
+                // List all compile dependencies and write to POM
+                configurations.api.getAllDependencies().each { Dependency dep ->
+                    if (dep.group == null || dep.version == null || dep.name == null || dep.name == "unspecified")
+                        return // ignore invalid dependencies
+
+                    def dependencyNode = dependencies.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', dep.group)
+                    dependencyNode.appendNode('artifactId', dep.name)
+                    dependencyNode.appendNode('version', dep.version)
+
+                    if (!dep.transitive) {
+                        // If this dependency is transitive, we should force exclude all its dependencies them from the POM
+                        def exclusionNode = dependencyNode.appendNode('exclusions').appendNode('exclusion')
+                        exclusionNode.appendNode('groupId', '*')
+                        exclusionNode.appendNode('artifactId', '*')
+                    } else if (!dep.properties.excludeRules.empty) {
+                        // Otherwise add specified exclude rules
+                        def exclusionsNode = dependencyNode.appendNode('exclusions')
+                        dep.properties.excludeRules.each { ExcludeRule rule ->
+                            def exclusionNode = exclusionsNode.appendNode('exclusion')
+                            exclusionNode.appendNode('groupId', rule.group ?: '*')
+                            exclusionNode.appendNode('artifactId', rule.module ?: '*')
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 dependencies {
@@ -33,4 +177,30 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    //Retrofit
+    implementation "com.squareup.retrofit2:converter-simplexml:$retrofit_versions"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_versions"
+    implementation "com.google.code.gson:gson:2.8.5"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_versions"
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:$okhttp_versions"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_versions"
+
+    // Dagger - Hilt
+    implementation "com.google.dagger:hilt-android:2.28-alpha"
+    kapt "com.google.dagger:hilt-android-compiler:2.28-alpha"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02"
+    kapt "androidx.hilt:hilt-compiler:1.0.0-alpha02"
+
+    // ViewModel + LiveData
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-alpha07'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha07'
+
+    // Material Design
+    implementation 'com.google.android.material:material:1.3.0-alpha02'
+
+    // Architectural Components
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+
 }
