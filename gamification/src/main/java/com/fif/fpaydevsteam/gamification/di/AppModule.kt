@@ -1,21 +1,23 @@
 package com.fif.fpaydevsteam.gamification.di
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.fif.fpaydevsteam.gamification.BuildConfig
 import com.fif.fpaydevsteam.gamification.data.GamificationRemoteDataSource
 import com.fif.fpaydevsteam.gamification.data.GamificationRepository
-import com.fif.fpaydevsteam.gamification.data.GamificationService
+import com.fif.fpaydevsteam.gamification.data.network.GamificationService
+import com.fif.fpaydevsteam.gamification.ui.GamificationViewModel
+import com.fif.fpaydevsteam.gamification.utils.ViewModelFactory
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import dagger.Component
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.multibindings.IntoMap
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-
-interface ViewModelInjector {
-    //fun inject(linkAccountViewModel: LinkAccountViewModel)
-}
 
 @Module
 object AppModule {
@@ -23,7 +25,7 @@ object AppModule {
     @Singleton
     @Provides
     fun provideRetrofit(gson: Gson) : Retrofit = Retrofit.Builder()
-        .baseUrl("https://gamification.mock.com/api/")
+        .baseUrl(BuildConfig.API_DOMAIN)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
@@ -43,4 +45,17 @@ object AppModule {
     @Provides
     fun provideRepository(remoteDataSource: GamificationRemoteDataSource) =
         GamificationRepository(remoteDataSource)
+}
+
+@Module
+abstract class ViewModelModule {
+
+    @Binds
+    abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(GamificationViewModel::class)
+    abstract fun bindLineIncreaseViewModel(viewModel: GamificationViewModel): ViewModel
+
 }

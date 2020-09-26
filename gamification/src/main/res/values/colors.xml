@@ -5,4 +5,7 @@
     <color name="grass">#43b02a</color>
     <color name="coolGrey">#b8bcc5</color>
 
+    <color name="background">@color/gray2</color>
+    <color name="gray2">#FAFAFA</color>
+
 </resources>

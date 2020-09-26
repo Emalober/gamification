@@ -1,21 +1,28 @@
 package com.fif.fpaydevsteam.gamification.di
 
 import android.app.Application
-import dagger.Component
-import javax.inject.Singleton
 
 class GamificationApplication : Application() {
 
-    val appComponent = DaggerApplicationComponent.create()
-    
+    companion object {
+        var applicationComponent: ApplicationComponent? = null
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        appComponent().inject(this)
+    }
 }
 
-@Singleton
-@Component(
-    modules = [
-        AppModule::class
-    ]
-)
-interface ApplicationComponent {
-    fun inject(gamificationApplication: GamificationApplication)
+private fun buildDagger(): ApplicationComponent {
+    if (GamificationApplication.applicationComponent == null) {
+        GamificationApplication.applicationComponent = DaggerApplicationComponent
+            .builder()
+            .build()
+    }
+    return GamificationApplication.applicationComponent!!
+}
+
+fun appComponent(): ApplicationComponent {
+    return buildDagger()
 }
