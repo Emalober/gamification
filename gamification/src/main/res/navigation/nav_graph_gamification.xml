@@ -13,10 +13,18 @@
         <action
             android:id="@+id/action_profileFragment_to_modalFragment"
             app:destination="@id/modalFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_awardsFragment"
+            app:destination="@id/awardsFragment" />
     </fragment>
     <fragment
         android:id="@+id/modalFragment"
         android:name="com.fif.fpaydevsteam.gamification.ui.ModalFragment"
         android:label="fragment_modal"
         tools:layout="@layout/fragment_modal" />
+    <fragment
+        android:id="@+id/awardsFragment"
+        android:name="com.fif.fpaydevsteam.gamification.AwardsFragment"
+        android:label="fragment_awards"
+        tools:layout="@layout/fragment_awards" />
 </navigation>

@@ -20,6 +20,7 @@ class ModalFragment : Fragment(R.layout.fragment_modal) {
             if(it) {
                 if (Random.nextInt(0, 10) < 1) {
                     animationView.setAnimation(R.raw.indian_money_surprise)
+                    animationView.repeatCount = 1
                     miniGameTextView.text = "Ganaste un dia de Homeoffice"
                 } else {
                     miniGameTextView.text = "Mejor suerte la próxima"

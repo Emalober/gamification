@@ -89,6 +89,8 @@ class ProfileFragment : Fragment(R.layout.profile_gamification_fragment)  {
         closeTextButton.setOnClickListener {
             closeOpenMiniGame()
         }
+
+        promotionCardView.setOnClickListener {  }
     }
 
     private fun startOpenMiniGame() {
