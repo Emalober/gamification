@@ -2,20 +2,28 @@ package com.fif.fpaydevsteam.gamification.ui
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fif.fpaydevsteam.gamification.R
 import com.fif.fpaydevsteam.gamification.utils.Resource
 import kotlinx.android.synthetic.main.profile_gamification_fragment.*
+import kotlin.random.Random
 
 class ProfileFragment : Fragment(R.layout.profile_gamification_fragment)  {
 
     private val gamificationViewModel: GamificationViewModel by navGraphViewModels(R.id.nav_graph_gamification)
 
     private lateinit var objAdapter: ObjectiveAdapter
+    private var animOpenModal: Animation? = null
+    private var animCloseModal: Animation? = null
+    private var animBlur: Animation? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,6 +72,41 @@ class ProfileFragment : Fragment(R.layout.profile_gamification_fragment)  {
                     Toast.makeText(requireActivity(), "Cargando...", Toast.LENGTH_SHORT).show()
             }
         })
+
+        animOpenModal = AnimationUtils.loadAnimation(requireContext(), R.anim.modal_open_anim)
+        animCloseModal = AnimationUtils.loadAnimation(requireContext(), R.anim.modal_close_anim)
+        animBlur = AnimationUtils.loadAnimation(requireContext(), R.anim.modal_blur_anim)
+        closeOpenMiniGame()
+
+        gamificationViewModel.hasChanceToPlay.observe(viewLifecycleOwner, Observer {
+            if(it) startOpenMiniGame()
+        })
+
+        giftBoxImageButton.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_modalFragment)
+        }
+
+        closeTextButton.setOnClickListener {
+            closeOpenMiniGame()
+        }
+    }
+
+    private fun startOpenMiniGame() {
+        blurMiniGameModal.visibility = View.VISIBLE
+
+        miniGameModal.alpha = 1f
+        blurMiniGameModal.alpha = 0.7f
+
+        miniGameModal.startAnimation(animOpenModal)
+        blurMiniGameModal.startAnimation(animBlur)
+    }
+
+    private fun closeOpenMiniGame() {
+        miniGameModal.alpha = 0f
+        blurMiniGameModal.alpha = 0f
+        miniGameModal.startAnimation(animOpenModal)
+        blurMiniGameModal.startAnimation(animBlur)
+        blurMiniGameModal.visibility = View.GONE
     }
 
     private fun setupRecycleView() = objectivesList.apply {

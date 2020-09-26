@@ -9,5 +9,14 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.fif.fpaydevsteam.gamification.ui.ProfileFragment"
-        android:label="ProfileFragment" />
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_modalFragment"
+            app:destination="@id/modalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/modalFragment"
+        android:name="com.fif.fpaydevsteam.gamification.ui.ModalFragment"
+        android:label="fragment_modal"
+        tools:layout="@layout/fragment_modal" />
 </navigation>

@@ -1,6 +1,5 @@
 package com.fif.fpaydevsteam.gamification.data.network
 
-import com.fif.fpaydevsteam.gamification.di.GamificationModule
 import com.fif.fpaydevsteam.gamification.models.*
 import retrofit2.Response
 import retrofit2.http.*

@@ -1,6 +1,7 @@
 package com.fif.fpaydevsteam.gamification.ui
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.fif.fpaydevsteam.gamification.data.GamificationRepository
 import com.fif.fpaydevsteam.gamification.di.GamificationModule
@@ -25,4 +26,5 @@ class GamificationViewModel : ViewModel() {
     val userAchievements: LiveData<Resource<Achievements>> = repository.getUserAchievements(GamificationModule.userKey)
     val achievements: LiveData<Resource<Achievements>> = repository.getAchievements()
 
+    val hasChanceToPlay = MutableLiveData<Boolean>(true)
 }
