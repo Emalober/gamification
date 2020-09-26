@@ -3,10 +3,8 @@ package com.fif.fpaydevsteam.gamification.ui
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fif.fpaydevsteam.gamification.R
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.profile_gamification_fragment.*
 
-@AndroidEntryPoint
 class ProfileFragment : Fragment(R.layout.profile_gamification_fragment)  {
 
     private lateinit var objAdapter: ObjectiveAdapter

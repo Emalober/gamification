@@ -5,6 +5,7 @@ buildscript {
     ext.nav_version = "2.3.0-alpha05"
     ext.okhttp_versions = '3.14.9'
     ext.retrofit_versions = '2.9.0'
+    ext.dagger2_version = '2.27'
 
     ext.fifLibraryVersion = '0.1.0'
 
