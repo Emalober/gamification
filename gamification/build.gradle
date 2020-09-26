@@ -44,7 +44,7 @@ android {
             debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "API_DOMAIN", "\"http://10.0.2.2:8080/\""
+            buildConfigField "String", "API_DOMAIN", "\"http://localhost:8080/\""
         }
         release {
             minifyEnabled false

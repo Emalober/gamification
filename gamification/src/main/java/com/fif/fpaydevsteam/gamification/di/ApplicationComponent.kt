@@ -1,5 +1,6 @@
 package com.fif.fpaydevsteam.gamification.di
 
+import android.content.Context
 import com.fif.fpaydevsteam.gamification.ui.GamificationViewModel
 import dagger.Component
 import javax.inject.Singleton
@@ -13,7 +14,7 @@ import javax.inject.Singleton
     ]
 )
 interface ApplicationComponent: ViewModelInjector {
-    fun inject(gamificationApplication: GamificationApplication)
+    fun inject(context: Context)
 }
 
 

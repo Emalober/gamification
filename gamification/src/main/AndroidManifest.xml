@@ -3,11 +3,4 @@
     package="com.fif.fpaydevsteam.gamification">
     <uses-permission android:name="android.permission.INTERNET"/>
 
-    <application
-        android:allowBackup="true"
-        android:name="com.fif.fpaydevsteam.gamification.di.GamificationApplication"
-        android:supportsRtl="true"
-        android:usesCleartextTraffic="true">
-
-    </application>
 </manifest>

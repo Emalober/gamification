@@ -3,14 +3,20 @@ package com.fif.fpaydevsteam.gamification.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.fif.fpaydevsteam.gamification.data.GamificationRepository
+import com.fif.fpaydevsteam.gamification.di.appComponent
 import com.fif.fpaydevsteam.gamification.models.Achievements
 import com.fif.fpaydevsteam.gamification.models.UserInfo
 import com.fif.fpaydevsteam.gamification.utils.Resource
 import javax.inject.Inject
 
-class GamificationViewModel @Inject constructor(
-    private val repository: GamificationRepository
-) : ViewModel() {
+class GamificationViewModel : ViewModel() {
+
+    @Inject
+    lateinit var repository: GamificationRepository
+
+    init {
+        appComponent().inject(this)
+    }
 
     private val userId = "XMNYRotEot-iUfDbvWo9ZfvXxM2AvDgf3UVDYMqa7so="
 

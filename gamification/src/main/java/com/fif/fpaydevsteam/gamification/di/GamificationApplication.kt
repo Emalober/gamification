@@ -1,26 +1,27 @@
 package com.fif.fpaydevsteam.gamification.di
 
-import android.app.Application
+import android.content.Context
 
-class GamificationApplication : Application() {
+class GamificationModule {
 
     companion object {
         var applicationComponent: ApplicationComponent? = null
+        internal lateinit var userKey: String
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        appComponent().inject(this)
+    fun init(context: Context, userKey: String) {
+        Companion.userKey = userKey
+        appComponent().inject(context)
     }
 }
 
 private fun buildDagger(): ApplicationComponent {
-    if (GamificationApplication.applicationComponent == null) {
-        GamificationApplication.applicationComponent = DaggerApplicationComponent
+    if (GamificationModule.applicationComponent == null) {
+        GamificationModule.applicationComponent = DaggerApplicationComponent
             .builder()
             .build()
     }
-    return GamificationApplication.applicationComponent!!
+    return GamificationModule.applicationComponent!!
 }
 
 fun appComponent(): ApplicationComponent {

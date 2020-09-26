@@ -22,16 +22,26 @@ class ProfileFragment : Fragment(R.layout.profile_gamification_fragment)  {
 
         setupRecycleView()
 
-        val logros = listOf(ObjectiveModel("Pagar 5 veces con Fpay", 20, "200 Exp"),
-                            ObjectiveModel("Referir a 5 amigos", 60, "500 Exp"),
-                            ObjectiveModel("Visita la nueva tienda", 0, "200 P.CMR"))
-
-        objAdapter.submitList(logros)
-
         gamificationViewModel.userInfo.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
+                    userNameTextView.text = "${it.data?.firstName} ${it.data?.lastSurname}"
                     Toast.makeText(requireActivity(), it.data?.firstName, Toast.LENGTH_LONG).show()
+                }
+                Resource.Status.ERROR ->
+                    Toast.makeText(requireActivity(), it.message, Toast.LENGTH_LONG).show()
+
+                Resource.Status.LOADING ->
+                    Toast.makeText(requireActivity(), "Cargando...", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        gamificationViewModel.achievements.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Resource.Status.SUCCESS -> {
+                    val logros = it.data?.achievements?.map { ar -> ObjectiveModel(ar.description, 20, "200 Exp") }
+                    logros?.let { it1 -> objAdapter.submitList(it1) }
+
                 }
                 Resource.Status.ERROR ->
                     Toast.makeText(requireActivity(), it.message, Toast.LENGTH_LONG).show()
