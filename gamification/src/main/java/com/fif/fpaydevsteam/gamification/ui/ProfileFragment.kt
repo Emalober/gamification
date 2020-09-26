@@ -41,7 +41,21 @@ class ProfileFragment : Fragment(R.layout.profile_gamification_fragment)  {
                 Resource.Status.SUCCESS -> {
                     val logros = it.data?.achievements?.map { ar -> ObjectiveModel(ar.description, 20, "200 Exp") }
                     logros?.let { it1 -> objAdapter.submitList(it1) }
+                }
+                Resource.Status.ERROR ->
+                    Toast.makeText(requireActivity(), it.message, Toast.LENGTH_LONG).show()
 
+                Resource.Status.LOADING ->
+                    Toast.makeText(requireActivity(), "Cargando...", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        gamificationViewModel.userRegister.observe(viewLifecycleOwner, Observer { it ->
+            when (it.status) {
+                Resource.Status.SUCCESS -> {
+                    cmrPointsTextView.text = it.data?.points?.quantity.toString()?:"¯\\_(ツ)_/¯"
+                    levelTextView.text = "Nivel ${it.data?.ranking}"
+                    nextLevelProgressBar.progress = it.data?.experience?.let { ex -> ex }?:0
                 }
                 Resource.Status.ERROR ->
                     Toast.makeText(requireActivity(), it.message, Toast.LENGTH_LONG).show()
