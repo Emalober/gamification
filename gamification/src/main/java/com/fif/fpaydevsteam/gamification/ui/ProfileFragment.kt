@@ -1,11 +1,11 @@
 package com.fif.fpaydevsteam.gamification.ui
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.fif.fpaydevsteam.gamification.R
 import com.fif.fpaydevsteam.gamification.utils.Resource
 import kotlinx.android.synthetic.main.profile_gamification_fragment.*
-import kotlin.random.Random
 
 class ProfileFragment : Fragment(R.layout.profile_gamification_fragment)  {
 
@@ -34,6 +33,7 @@ class ProfileFragment : Fragment(R.layout.profile_gamification_fragment)  {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
                     userNameTextView.text = "${it.data?.firstName} ${it.data?.lastSurname}"
+                    userNameTextView.text = "Homero Thompson"
                     Toast.makeText(requireActivity(), it.data?.firstName, Toast.LENGTH_LONG).show()
                 }
                 Resource.Status.ERROR ->
@@ -47,7 +47,7 @@ class ProfileFragment : Fragment(R.layout.profile_gamification_fragment)  {
         gamificationViewModel.achievements.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
-                    val logros = it.data?.achievements?.map { ar -> ObjectiveModel(ar.description, 20, "200 Exp") }
+                    val logros = it.data?.map { ar -> ObjectiveModel(ar.description, 20, "200 Exp") }
                     logros?.let { it1 -> objAdapter.submitList(it1) }
                 }
                 Resource.Status.ERROR ->
@@ -62,7 +62,7 @@ class ProfileFragment : Fragment(R.layout.profile_gamification_fragment)  {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
                     cmrPointsTextView.text = it.data?.points?.quantity.toString()?:"¯\\_(ツ)_/¯"
-                    levelTextView.text = "Nivel ${it.data?.ranking}"
+                    levelTextView.text = "Nivel ${it.data?.ranking?.plus(1)}"
                     nextLevelProgressBar.progress = it.data?.experience?.let { ex -> ex }?:0
                 }
                 Resource.Status.ERROR ->
@@ -90,7 +90,15 @@ class ProfileFragment : Fragment(R.layout.profile_gamification_fragment)  {
             closeOpenMiniGame()
         }
 
-        promotionCardView.setOnClickListener {  }
+        promotionCardView.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_awardsFragment)
+        }
+
+        nextLevelCardView.setOnClickListener {
+            //findNavController().navigate(R.id.action_global_easter_egg)
+
+            //findNavController().navigate(Uri.parse(getString(R.string.deep_link_easter_egg)))
+        }
     }
 
     private fun startOpenMiniGame() {
@@ -109,6 +117,7 @@ class ProfileFragment : Fragment(R.layout.profile_gamification_fragment)  {
         miniGameModal.startAnimation(animOpenModal)
         blurMiniGameModal.startAnimation(animBlur)
         blurMiniGameModal.visibility = View.GONE
+        miniGameModal.visibility = View.GONE
     }
 
     private fun setupRecycleView() = objectivesList.apply {

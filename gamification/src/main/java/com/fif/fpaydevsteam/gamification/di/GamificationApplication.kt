@@ -12,7 +12,7 @@ class GamificationModule {
     }
 
     fun init(context: Context, customer: Customer, country: String) {
-        Companion.userKey = "XMNYRotEot-iUfDbvWo9ZfvXxM2AvDgf3UVDYMqa7so=" //customer.generateKey()
+        Companion.userKey = "Ka7duh7yBgPxv3hgXXCtVPpgWMqTpDlytZH0gP50vB8=" //customer.generateKey()
         Companion.country = country
         appComponent().inject(context)
     }

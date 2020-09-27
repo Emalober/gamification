@@ -27,4 +27,20 @@
         android:name="com.fif.fpaydevsteam.gamification.AwardsFragment"
         android:label="fragment_awards"
         tools:layout="@layout/fragment_awards" />
+    <fragment
+        android:id="@+id/easterEggFragment"
+        android:name="com.fif.fpaydevsteam.gamification.ui.EasterEggFragment"
+        android:label="fragment_easter_egg"
+        tools:layout="@layout/fragment_easter_egg" >
+        <deepLink
+            android:id="@+id/easterEggDeepLink"
+            app:uri="@string/deep_link_easter_egg" />
+    </fragment>
+
+    <action
+        android:id="@+id/action_global_easter_egg"
+        app:destination="@id/easterEggFragment"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/easterEggFragment"
+        app:popUpToInclusive="true" />
 </navigation>

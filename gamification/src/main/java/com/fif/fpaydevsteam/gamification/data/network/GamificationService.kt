@@ -18,10 +18,10 @@ interface GamificationService {
 
     @GET("/loyalty/gamification/achievements/{id}")
     suspend fun getUserAchievements(@Path("id") id: String,
-                                    @Header(headerCountry) country: String): Response<Achievements>
+                                    @Header(headerCountry) country: String): Response<List<Achievement>>
 
     @GET("/loyalty/gamification/achievements")
-    suspend fun getAchievements(@Header(headerCountry) country: String): Response<Achievements>
+    suspend fun getAchievements(@Header(headerCountry) country: String): Response<List<Achievement>>
 
     @POST("/loyalty/gamification/achievements/:id")
     suspend fun createAchievements(@Path("id") id: String,
@@ -29,6 +29,6 @@ interface GamificationService {
                                    @Header(headerCountry) country: String): Response<Achievements>
 
     @GET("/loyalty/gamification/achievements")
-    suspend fun getAwards(@Header(headerCountry) country: String): Response<Achievements>
+    suspend fun getAwards(@Header(headerCountry) country: String): Response<List<Award>>
 
 }

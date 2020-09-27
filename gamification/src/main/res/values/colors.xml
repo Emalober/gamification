@@ -5,6 +5,7 @@
     <color name="grass">#43b02a</color>
     <color name="coolGrey">#b8bcc5</color>
     <color name="slate">#444b62</color>
+    <color name="cyan">#52b5c5</color>
 
     <color name="background">@color/gray2</color>
     <color name="gray2">#FAFAFA</color>
