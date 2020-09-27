@@ -31,4 +31,9 @@ interface GamificationService {
     @GET("/loyalty/gamification/achievements")
     suspend fun getAwards(@Header(headerCountry) country: String): Response<List<Award>>
 
+    @POST("/loyalty/gamification/user/add/:id/:points")
+    suspend fun addPoints(@Path("id") id: String,
+                                   @Path("points") points: Int,
+                                  @Body new: String = "",
+                                  @Header(headerCountry) country: String): Response<Any>
 }

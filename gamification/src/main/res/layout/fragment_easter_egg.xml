@@ -5,21 +5,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cyan"
+    android:background="@color/background"
     tools:context=".ui.ModalFragment">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/awardTextView"
         android:textAppearance="?attr/textAppearanceHeadline5"
-        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:textColor="@color/slate"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="Ganaste un dia de Homeoffice" />
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/infoTextView"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:layout_width="wrap_content"
+        android:textColor="@color/slate"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/awardTextView" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationView"
@@ -30,20 +41,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:lottie_autoPlay="false"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/bunny_egg_easter" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/infoTextView"
-        android:textAppearance="?attr/textAppearanceHeadline6"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:textColor="@color/slate"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/animationView" />
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/smash_an_egg" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

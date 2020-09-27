@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fif.fpaydevsteam.gamification.R
+import com.fif.fpaydevsteam.gamification.utils.MAX_EXPERIENCE_BY_LEVEL
 import com.fif.fpaydevsteam.gamification.utils.Resource
 import kotlinx.android.synthetic.main.profile_gamification_fragment.*
 
@@ -62,8 +63,9 @@ class ProfileFragment : Fragment(R.layout.profile_gamification_fragment)  {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
                     cmrPointsTextView.text = it.data?.points?.quantity.toString()?:"¯\\_(ツ)_/¯"
-                    levelTextView.text = "Nivel ${it.data?.ranking?.plus(1)}"
-                    nextLevelProgressBar.progress = it.data?.experience?.let { ex -> ex }?:0
+                    val lv = it.data?.ranking?.plus(1)?:0
+                    levelTextView.text = "Nivel ${ lv + 1 }"
+                    nextLevelProgressBar.progress = it.data?.experience?.let { xp -> (xp-MAX_EXPERIENCE_BY_LEVEL*lv)/MAX_EXPERIENCE_BY_LEVEL*100}?:0
                 }
                 Resource.Status.ERROR ->
                     Toast.makeText(requireActivity(), it.message, Toast.LENGTH_LONG).show()
@@ -91,11 +93,13 @@ class ProfileFragment : Fragment(R.layout.profile_gamification_fragment)  {
         }
 
         promotionCardView.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_awardsFragment)
+            findNavController().navigate(R.id.action_global_easter_egg)
+
+            //findNavController().navigate(R.id.action_profileFragment_to_awardsFragment)
         }
 
         nextLevelCardView.setOnClickListener {
-            //findNavController().navigate(R.id.action_global_easter_egg)
+           // findNavController().navigate(R.id.action_global_easter_egg)
 
             //findNavController().navigate(Uri.parse(getString(R.string.deep_link_easter_egg)))
         }

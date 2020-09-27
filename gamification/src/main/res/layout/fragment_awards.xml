@@ -5,9 +5,10 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".AwardsFragment">
+    tools:context=".ui.AwardsFragment">
 
     <ImageView
+        android:id="@+id/dummyImageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="56dp"

@@ -95,7 +95,7 @@
                     android:id="@+id/cmrPointsTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="180.000"
+                    android:text=""
                     android:textAppearance="?attr/textAppearanceHeadline2"
                     android:textStyle="bold"
                     android:textColor="@color/grass"

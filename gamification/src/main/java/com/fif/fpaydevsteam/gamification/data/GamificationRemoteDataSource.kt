@@ -14,5 +14,6 @@ class GamificationRemoteDataSource @Inject constructor(
     suspend fun getUserAchievements(id: String) = getResult { gamificatioService.getUserAchievements(id, GamificationModule.country) }
     suspend fun getAchievements() = getResult { gamificatioService.getAchievements(GamificationModule.country) }
     suspend fun getAwards() = getResult { gamificatioService.getAwards(GamificationModule.country) }
+    suspend fun addPoints(id: String, points: Int) = getResult { gamificatioService.addPoints(id, points, "",GamificationModule.country) }
 
 }

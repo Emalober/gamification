@@ -12,5 +12,6 @@ class GamificationRepository @Inject constructor(
     fun getUserAchievements(id: String) = performGetOperation { remoteDataSource.getUserAchievements(id) }
     fun getAchievements() = performGetOperation { remoteDataSource.getAchievements() }
     fun getAwards() = performGetOperation { remoteDataSource.getAwards() }
+    fun addPoints(id: String, points: Int) = performGetOperation { remoteDataSource.addPoints(id, points) }
 
 }

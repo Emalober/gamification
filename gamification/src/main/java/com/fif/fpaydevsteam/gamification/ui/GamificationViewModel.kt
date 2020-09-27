@@ -2,6 +2,7 @@ package com.fif.fpaydevsteam.gamification.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.fif.fpaydevsteam.gamification.data.GamificationRepository
 import com.fif.fpaydevsteam.gamification.di.GamificationModule
@@ -16,8 +17,18 @@ class GamificationViewModel : ViewModel() {
     @Inject
     lateinit var repository: GamificationRepository
 
+    val addPoints: LiveData<Resource<Any>>
+
+    val hasChanceToPlay = MutableLiveData<Boolean>(true)
+    val hasAPrize = MutableLiveData<Award>(null)
+    private var increasePoints: MutableLiveData<Int> = MutableLiveData()
+
     init {
         appComponent().inject(this)
+
+        addPoints = Transformations.switchMap(increasePoints) {
+            repository.addPoints(GamificationModule.userKey, it)
+        }
     }
 
     val userInfo: LiveData<Resource<UserInfo>> = repository.getUser(GamificationModule.userKey)
@@ -26,8 +37,9 @@ class GamificationViewModel : ViewModel() {
     val achievements: LiveData<Resource<List<Achievement>>> = repository.getAchievements()
     val awardes: LiveData<Resource<List<Award>>> = repository.getAwards()
 
-    val hasChanceToPlay = MutableLiveData<Boolean>(true)
-    val hasAPrize = MutableLiveData<Award>(null)
+    fun addPoints(points: Int) {
+        increasePoints.value = points
+    }
 
     fun createEasterEgg() {
         if(hasAPrize.value != null) return

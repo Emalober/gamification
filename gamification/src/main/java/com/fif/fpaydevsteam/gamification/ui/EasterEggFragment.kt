@@ -10,7 +10,6 @@ import androidx.navigation.navGraphViewModels
 import com.fif.fpaydevsteam.gamification.R
 import com.fif.fpaydevsteam.gamification.utils.Resource
 import kotlinx.android.synthetic.main.fragment_easter_egg.*
-import kotlinx.android.synthetic.main.fragment_easter_egg.animationView
 
 class EasterEggFragment : Fragment(R.layout.fragment_easter_egg) {
 
@@ -34,19 +33,23 @@ class EasterEggFragment : Fragment(R.layout.fragment_easter_egg) {
 
         gamificationViewModel.hasAPrize.observe(viewLifecycleOwner, Observer {
             it?.let {
+                awardTextView.text = "Felicitaciones!!"
+                infoTextView.text = "Ganaste ${it.description}"
                 if (it.type.contentEquals("exp")) {
-                    animationView.setAnimation(R.raw.egg_first)
-                    awardTextView.text = "No encontraste nada"
-                    infoTextView.text = "Pero igual ganaste ${it.description}"
-                } else {
-                    awardTextView.text = "Felicitaciones!!"
-                    infoTextView.text = "Ganaste ${it.description}"
-                    animationView.repeatCount = 1
-                    animationView.setAnimation(R.raw.bunny_egg_easter)
+                    gamificationViewModel.addPoints(500)
                 }
-                animationView.playAnimation()
-            }?:findNavController().navigateUp()
+
+                animationView.addAnimatorUpdateListener { valueAnimator ->
+                    if(valueAnimator.animatedFraction > 0.8) {
+                        infoTextView.visibility = View.VISIBLE
+                        awardTextView.visibility = View.VISIBLE
+                    }
+                }
+            }
         })
 
+        animationView.setOnClickListener {
+            findNavController().navigate(R.id.action_easterEggFragment_to_awardsFragment)
+        }
     }
 }

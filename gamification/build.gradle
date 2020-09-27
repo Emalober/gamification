@@ -44,12 +44,12 @@ android {
             debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "API_DOMAIN", "\"http://localhost:8080/\""
+            buildConfigField "String", "API_DOMAIN", "\"https://loyalty-gamification.herokuapp.com/\""
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "API_DOMAIN", "\"https://gamification.mock.com/api/\""
+            buildConfigField "String", "API_DOMAIN", "\"https://loyalty-gamification.herokuapp.com/\""
         }
     }
 
